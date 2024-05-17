@@ -47,7 +47,7 @@ def product_items(option, filter, sort):
 def product_item_by_id(id):
     conn = create_connection()
     with conn.cursor() as cursor:
-        sql = "SELECT * FROM product_item WHERE id = %s"
+        sql = "SELECT * FROM product_item WHERE productId = %s"
         cursor.execute(sql, (id,))
         result = cursor.fetchone()
         product = product_by_id(result[2])

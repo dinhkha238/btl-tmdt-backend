@@ -9,6 +9,7 @@ from router import order_Rest
 from router import shipment_Rest
 from router import voucher_Rest
 from router import payment_Rest
+from router import feedback_Rest
 
 # Khởi tạo ứng dụng FastAPI
 app = FastAPI()
@@ -21,6 +22,7 @@ app.include_router(order_Rest.router)
 app.include_router(shipment_Rest.router)
 app.include_router(voucher_Rest.router)
 app.include_router(payment_Rest.router)
+app.include_router(feedback_Rest.router)
 
 # Add CORS middleware to allow all origins
 origins = ["*"]
