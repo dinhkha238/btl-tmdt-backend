@@ -86,3 +86,10 @@ def cancel_order(id):
         sql = "UPDATE `order` SET payStatus = -1 WHERE id = %s"
         cursor.execute(sql, (id,))
         conn.commit()
+
+def reviewed_order(id):
+    conn = create_connection()
+    with conn.cursor() as cursor:
+        sql = "UPDATE `order` SET payStatus = 2 WHERE id = %s"
+        cursor.execute(sql, (id,))
+        conn.commit()
