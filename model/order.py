@@ -17,6 +17,8 @@ class OrderBase(BaseModel):
     updatedAt: Optional[str] = None
     totalOrder: Optional[float] = None
     payStatus: Optional[int] = None
+    shipAdress: Optional[str] = None
+    phone: Optional[str] = None
 
 class Order(OrderBase):
     id: int

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Body, Depends
 
 from model.order import OrderBase
 from security.security import validate_token
-from service.order_DAO import add_order, all_orders, my_orders, order_by_id
+from service.order_DAO import add_order, all_orders, cancel_order, my_orders, order_by_id
 
 
 
@@ -28,4 +28,9 @@ async def get_my_order(id:str = Depends(validate_token)):
 async def post_create_order(body:OrderBase = Body(...),id:str = Depends(validate_token)):
     body = body.dict()
     add_order(id,body)
+    return True
+
+@router.put("/cancel-order/{order_id}", tags=["Order"])
+async def put_cancel_order(order_id:int):
+    cancel_order(order_id)
     return True

@@ -40,7 +40,7 @@ def order_by_id(order_id):
         for item in cart:
             totalOrder += item.price * item.quantity
         totalOrder = totalOrder - voucher.value + shipment.fees
-        order = OrderDetail(id=result[0], employeeId=result[1], paymentId=result[2], shipmentId=result[3], voucherId=result[4], cartId=result[5], createdAt=result[6], updatedAt=result[7],payStatus=result[8],totalOrder=totalOrder, payment=payment, shipment=shipment, voucher=voucher, cart=cart)
+        order = OrderDetail(id=result[0], employeeId=result[1], paymentId=result[2], shipmentId=result[3], voucherId=result[4], cartId=result[5], createdAt=result[6], updatedAt=result[7],payStatus=result[8],totalOrder=totalOrder, payment=payment, shipment=shipment, voucher=voucher, cart=cart, shipAdress=result[9], phone=result[10])
         return order
         
 def my_orders(id):
@@ -63,7 +63,7 @@ def my_orders(id):
                 for item in cart:
                     totalOrder += item.price * item.quantity
                 totalOrder = totalOrder - voucher.value + shipment.fees
-                order = OrderDetail(id=result[0], employeeId=result[1], paymentId=result[2], shipmentId=result[3], voucherId=result[4], cartId=result[5], createdAt=result[6], updatedAt=result[7],payStatus=result[8],totalOrder=totalOrder, payment=payment, shipment=shipment, voucher=voucher, cart=cart)
+                order = OrderDetail(id=result[0], employeeId=result[1], paymentId=result[2], shipmentId=result[3], voucherId=result[4], cartId=result[5], createdAt=result[6], updatedAt=result[7],payStatus=result[8],totalOrder=totalOrder, payment=payment, shipment=shipment, voucher=voucher, cart=cart, shipAdress=result[9], phone=result[10])
                 list_orders.append(order)
         return list_orders
     
@@ -74,8 +74,15 @@ def add_order(id, body):
         cursor.execute(sql, (id,))
         results = cursor.fetchall()
         cart_id = results[-1][0]
-        sql = "INSERT INTO `order` (paymentId, shipmentId, voucherId, cartId,createdAt, payStatus) VALUES (%s, %s, %s, %s, %s,%s)"
-        cursor.execute(sql, (body["paymentId"], body["shipmentId"], body["voucherId"], cart_id,body["createdAt"], 0))
+        sql = "INSERT INTO `order` (paymentId, shipmentId, voucherId, cartId,createdAt, payStatus, shipAdress, phone) VALUES (%s, %s, %s, %s, %s,%s,%s,%s)"
+        cursor.execute(sql, (body["paymentId"], body["shipmentId"], body["voucherId"], cart_id,body["createdAt"], 0, body["shipAdress"], body["phone"]))
         sql = "INSERT INTO `cart` (customerId, createdAt) VALUES (%s, %s)"
         cursor.execute(sql, (id, body["createdAt"]))
+        conn.commit()
+
+def cancel_order(id):
+    conn = create_connection()
+    with conn.cursor() as cursor:
+        sql = "UPDATE `order` SET payStatus = -1 WHERE id = %s"
+        cursor.execute(sql, (id,))
         conn.commit()
