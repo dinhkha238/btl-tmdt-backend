@@ -11,7 +11,7 @@ secret_algorithm_pass = os.environ.get('SECURITY_ALGORITHM_PASS')
 
 def generate_token(id: Union[str, Any]) -> str:
     expire = datetime.utcnow() + timedelta(
-        seconds=60*60*24   # Expired after 1 hours
+        seconds=60*60000*24   
     )
     to_encode = {   
         "exp": expire, "_id": id

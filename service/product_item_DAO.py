@@ -1,6 +1,7 @@
 
 from database import create_connection
 from model.product_item import ProductItem
+from model.statistic_product_item import StatisticProductItemBase
 from service.product_DAO import product_by_id
 from fuzzywuzzy import fuzz
 
@@ -56,3 +57,16 @@ def product_item_by_id(id):
         product = product_by_id(result[2])
         product_item = ProductItem(id=result[0], employeeId=result[1], productId=result[2], price=result[3], addedDate=result[4], inStock=result[5], name=product.name, summary=product.summary, releaseDate=product.releaseDate, provider=product.provider, brand=product.brand, model=product.model, spec=product.spec, version=product.version, roomType=product.roomType, series=product.series, discriminator=product.discriminator, url=product.url)
         return product_item
+    
+def statistic_product_item():
+    conn = create_connection()
+    with conn.cursor() as cursor:
+        sql = "SELECT productItemId, SUM(quantity) AS totalQuantity FROM tmdt.cart_product_item cpi INNER JOIN tmdt.order o ON cpi.cartId = o.cartId and payStatus > 0 GROUP BY productItemId"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        list_product_item = []
+        for row in results:
+            pt_by_id = product_item_by_id(row[0])
+            product_item = StatisticProductItemBase(productItemId = row[0], totalQuantity = row[1], nameProductItem = pt_by_id.name)
+            list_product_item.append(product_item)
+        return list_product_item
