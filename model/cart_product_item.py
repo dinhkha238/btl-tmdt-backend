@@ -10,6 +10,7 @@ class CartProductItemBase(BaseModel):
     name: Optional[str] = None
     price: Optional[float] = None
     url: Optional[str] = None
+    inStock: Optional[int] = None
 
 class CartProductItem(CartProductItemBase):
     id: int

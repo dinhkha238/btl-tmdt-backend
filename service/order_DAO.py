@@ -7,11 +7,16 @@ from service.shipment_DAO import shipment_by_id
 from service.voucher_DAO import voucher_by_id
 
 
-def all_orders():
+def all_orders(month_year):
     conn = create_connection()
+    sql=""
     with conn.cursor() as cursor:
-        sql = "SELECT * FROM `order`"
-        cursor.execute(sql)
+        if month_year != "all":
+            sql = "SELECT * FROM `order` WHERE DATE_FORMAT(STR_TO_DATE(createdAt, '%\d/%m/%Y %H:%\i:%\s'), '%Y-%m') = %s"
+            cursor.execute(sql, (month_year,))  
+        else:
+            sql = "SELECT * FROM `order`"
+            cursor.execute(sql)
         results = cursor.fetchall()
         list_orders = []
         for row in results:
@@ -78,6 +83,11 @@ def add_order(id, body):
         cursor.execute(sql, (body["paymentId"], body["shipmentId"], body["voucherId"], cart_id,body["createdAt"], 0, body["shipAdress"], body["phone"]))
         sql = "INSERT INTO `cart` (customerId, createdAt) VALUES (%s, %s)"
         cursor.execute(sql, (id, body["createdAt"]))
+        product_in_cart = list_cart_product_item_by_cart_id(cart_id)
+        for item in product_in_cart:
+            # giảm số lượng sản phẩm trong bảng product_item where productId = item.productItemId
+            sql = "UPDATE product_item SET inStock = inStock - %s WHERE productId = %s"
+            cursor.execute(sql, (item.quantity, item.productItemId))
         conn.commit()
 
 def cancel_order(id):
@@ -91,5 +101,12 @@ def reviewed_order(id):
     conn = create_connection()
     with conn.cursor() as cursor:
         sql = "UPDATE `order` SET payStatus = 2 WHERE id = %s"
+        cursor.execute(sql, (id,))
+        conn.commit()
+
+def accept_order(id):
+    conn = create_connection()
+    with conn.cursor() as cursor:
+        sql = "UPDATE `order` SET payStatus = 1 WHERE id = %s"
         cursor.execute(sql, (id,))
         conn.commit()

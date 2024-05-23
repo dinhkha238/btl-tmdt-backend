@@ -13,6 +13,6 @@ def list_cart_product_item_by_cart_id(cart_id):
         list_cart_product_item = []
         for row in results:
             product = product_item_by_id(row[2])
-            cart_product_item = CartProductItem(id=row[0], cartId=row[1], productItemId=row[2], quantity=row[3],name=product.name,price=product.price,url=product.url)
+            cart_product_item = CartProductItem(id=row[0], cartId=row[1], productItemId=row[2], quantity=row[3],name=product.name,price=product.price,url=product.url,inStock=product.inStock)
             list_cart_product_item.append(cart_product_item)
         return list_cart_product_item
