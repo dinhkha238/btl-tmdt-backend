@@ -29,7 +29,7 @@ async def post_create_user(body:UserBase = Body(...)):
     customer = existing_customer(body['username'])
     if customer:
         raise HTTPException(status_code=400, detail='Tài khoản đã tồn tại')
-    create_user(body['fullname'],body['username'], body['password'])
+    create_user(body['fullname'],body['username'], body['password'],body['contact'],body['address'])
     return {'message': 'Tạo tài khoản thành công'}
 
 @router.post("/login", tags=["Users"])

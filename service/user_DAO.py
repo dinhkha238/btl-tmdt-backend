@@ -56,11 +56,11 @@ def info_customer(id):
             return user
         return None
     
-def create_user(fullname, username, password):
+def create_user(fullname, username, password, contact, address):
     conn = create_connection()
     with conn.cursor() as cursor:
-        sql = "INSERT INTO user (fullname, username, password) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (fullname, username, password))
+        sql = "INSERT INTO user (fullname, username, password, contact, address) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql, (fullname, username, password, contact, address ))
         conn.commit()
     with conn.cursor() as cursor:
         user = existing_customer(username)
