@@ -2,7 +2,7 @@
 from database import create_connection
 from model.product_item import ProductItem
 from service.product_DAO import product_by_id
-
+from fuzzywuzzy import fuzz
 
 def product_items(option, filter, sort):
     conn = create_connection()
@@ -31,7 +31,10 @@ def product_items(option, filter, sort):
         if filter != None:
             # không phân biệt chữ hoa chữ thường
             filter = filter.lower()
-            list_product_item = [product_item for product_item in list_product_item if filter in product_item.name.lower()]
+            # Ngưỡng độ tương đồng (tùy chỉnh theo nhu cầu của bạn)
+            threshold = 60
+            # Lọc các sản phẩm dựa trên độ tương đồng của tên
+            list_product_item = [product_item for product_item in list_product_item if fuzz.partial_ratio(filter, product_item.name.lower()) >= threshold]
         if sort != None:
             # if sort = "option2" => sort by name
             if sort == "option2":

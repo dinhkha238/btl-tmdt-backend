@@ -10,3 +10,7 @@
 - Requirement
 
 * pip freeze > requirements.txt
+
+- Install
+
+* pip install -r requirements.txt
