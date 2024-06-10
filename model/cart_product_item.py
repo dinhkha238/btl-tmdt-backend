@@ -1,7 +1,8 @@
 
 from typing import Optional
 from pydantic import BaseModel
-
+from sqlalchemy import Column, Integer, String, Float
+from dbconnect import Base
 
 class CartProductItemBase(BaseModel):
     cartId: Optional[int] = None
@@ -12,8 +13,20 @@ class CartProductItemBase(BaseModel):
     url: Optional[str] = None
     inStock: Optional[int] = None
 
-class CartProductItem(CartProductItemBase):
-    id: int
+class CartProductItem(Base):
+    __tablename__ = 'cart_product_item'
 
-    class Config:
-        orm_mode = True
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    cartId = Column(Integer, nullable=True)
+    productItemId = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    # name = Column(String(255), nullable=True)
+    # price = Column(Float, nullable=True)
+    # url = Column(String(255), nullable=True)
+    # inStock = Column(Integer, nullable=True)
+
+# class CartProductItem(CartProductItemBase):
+#     id: int
+
+#     class Config:
+#         orm_mode = True

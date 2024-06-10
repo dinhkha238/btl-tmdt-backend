@@ -1,6 +1,8 @@
 
 from typing import Optional
 from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String, Float
+from dbconnect import Base
 
 class FeedbackBase(BaseModel):
     customerId: Optional[int] = None
@@ -8,10 +10,22 @@ class FeedbackBase(BaseModel):
     description: str
     rating: float
     createdAt: Optional[str] = None
-    customer: Optional[str] = None
+    # customer: Optional[str] = None
 
-class Feedback(FeedbackBase):
-    id: int
+class Feedback(Base):
+    __tablename__ = 'feedback'
 
-    class Config:
-        orm_mode = True
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    customerId = Column(Integer, nullable=True)
+    productId = Column(Integer, nullable=True)
+    description = Column(String(255), nullable=True)
+    rating = Column(Float, nullable=True)
+    createdAt = Column(String(255), nullable=True)
+    # customer = Column(String(255), nullable=True)
+    # discriminator = Column(String(255), nullable=True)
+
+# class Feedback(FeedbackBase):
+#     id: int
+
+#     class Config:
+#         orm_mode = True

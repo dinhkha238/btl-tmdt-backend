@@ -1,15 +1,26 @@
 
 from typing import Optional
 from pydantic import BaseModel
-
+from sqlalchemy import Column, Integer, String, Float
+from dbconnect import Base
 class CartBase(BaseModel):
     customerId: int
     createdAt: Optional[str] = None
     updatedAt: Optional[str] = None
     totalCart: Optional[float] = None
 
-class Cart(CartBase):
-    id: int
+class Cart(Base):
+    __tablename__ = 'cart'
 
-    class Config:
-        orm_mode = True
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    customerId = Column(Integer, nullable=True)
+    createdAt = Column(String(255), nullable=True)
+    updatedAt = Column(String(255), nullable=True)
+    # totalCart = Column(Float, nullable=True)
+    # discriminator = Column(String(255), nullable=True)
+
+# class Cart(CartBase):
+#     id: int
+
+#     class Config:
+#         orm_mode = True
