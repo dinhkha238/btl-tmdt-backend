@@ -12,12 +12,6 @@ class VoucherBase(BaseModel):
     percentage: Optional[int] = None
     discriminator: Optional[str] = None
 
-# class Voucher(VoucherBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
-
 class Voucher(Base):
     __tablename__ = 'voucher'
 

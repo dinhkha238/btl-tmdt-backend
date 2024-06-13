@@ -24,10 +24,4 @@ class User(Base):
     address = Column(String(255), nullable=True)
     contact = Column(String(255), nullable=True)    
 
-# class User(UserBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
-
 

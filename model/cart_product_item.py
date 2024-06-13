@@ -20,13 +20,3 @@ class CartProductItem(Base):
     cartId = Column(Integer, nullable=True)
     productItemId = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)
-    # name = Column(String(255), nullable=True)
-    # price = Column(Float, nullable=True)
-    # url = Column(String(255), nullable=True)
-    # inStock = Column(Integer, nullable=True)
-
-# class CartProductItem(CartProductItemBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True

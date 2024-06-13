@@ -18,12 +18,6 @@ class ProductBase(BaseModel):
     employeeId: int
     url: Optional[str] = None
 
-# class Product(ProductBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
-
 
 class Product(Base):
     __tablename__ = 'product'

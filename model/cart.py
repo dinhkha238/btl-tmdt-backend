@@ -16,11 +16,3 @@ class Cart(Base):
     customerId = Column(Integer, nullable=True)
     createdAt = Column(String(255), nullable=True)
     updatedAt = Column(String(255), nullable=True)
-    # totalCart = Column(Float, nullable=True)
-    # discriminator = Column(String(255), nullable=True)
-
-# class Cart(CartBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True

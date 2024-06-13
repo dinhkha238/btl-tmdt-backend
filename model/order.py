@@ -34,22 +34,12 @@ class Order(Base):
     cartId = Column(Integer, nullable=True)
     createdAt = Column(String(255), nullable=True)
     updatedAt = Column(String(255), nullable=True)
-    # totalOrder = Column(Float, nullable=True)
     payStatus = Column(Integer, nullable=True)
     shipAdress = Column(String(255), nullable=True)
     phone = Column(String(255), nullable=True)
 
-# class Order(OrderBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
 
 class OrderDetail(Order):
-    # payment: Payment
-    # shipment: Shipment
-    # voucher: Voucher
-    # cart: List[CartProductItem]
 
     class Config:
         orm_mode = True

@@ -20,10 +20,3 @@ class Shipment(Base):
     name = Column(String(255), nullable=True)
     type = Column(String(255), nullable=True)
     note = Column(String(255), nullable=True)
-
-# class Shipment(ShipmentBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
-

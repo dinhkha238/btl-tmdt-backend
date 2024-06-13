@@ -19,10 +19,4 @@ class ProductItem(Base):
     price = Column(Float, nullable=True)
     addedDate = Column(String(255), nullable=True)
     inStock = Column(Integer, nullable=True)
-    # discriminator = Column(String(255), nullable=True)
-
-# class ProductItem(ProductItemBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
+  

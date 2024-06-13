@@ -9,9 +9,3 @@ class Customer(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     userId = Column(Integer, nullable=True)
-
-# class Customer(CustomerBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True

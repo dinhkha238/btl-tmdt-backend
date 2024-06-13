@@ -7,26 +7,9 @@ from service.payment_DAO import payment_by_id
 from sqlalchemy.orm import Session
 
 def all_vouchers(db:Session):
-    # conn = create_connection()
-    # with conn.cursor() as cursor:
-    #     sql = "SELECT * FROM `voucher`"
-    #     cursor.execute(sql)
-    #     results = cursor.fetchall()
-    #     list_voucher = []
-    #     for row in results:
-    #         voucher = Voucher(id=row[0], name=row[1], expireDate=row[2], quantity=row[3], value=row[4], percentage=row[5], discriminator=row[6])
-    #         list_voucher.append(voucher)
-    #     return list_voucher
     return db.query(Voucher).all()
     
 def voucher_by_id(voucher_id, db:Session):
-    # conn = create_connection()
-    # with conn.cursor() as cursor:
-    #     sql = "SELECT * FROM `voucher` WHERE `id` = %s"
-    #     cursor.execute(sql, (voucher_id,))
-    #     result = cursor.fetchone()
-    #     voucher = Voucher(id=result[0], name=result[1], expireDate=result[2], quantity=result[3], value=result[4], percentage=result[5], discriminator=result[6])
-    #     return voucher
     return db.query(Voucher).filter(Voucher.id == voucher_id).first()
     
         

@@ -21,11 +21,3 @@ class Feedback(Base):
     description = Column(String(255), nullable=True)
     rating = Column(Float, nullable=True)
     createdAt = Column(String(255), nullable=True)
-    # customer = Column(String(255), nullable=True)
-    # discriminator = Column(String(255), nullable=True)
-
-# class Feedback(FeedbackBase):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
