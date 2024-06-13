@@ -6,6 +6,7 @@ class StatisticProductItemBase(BaseModel):
     productItemId: int
     nameProductItem: str
     totalQuantity:int
+    totalRevenue:float
 
 class StatisticProductItem(StatisticProductItemBase):
     id: Optional[int] = None
