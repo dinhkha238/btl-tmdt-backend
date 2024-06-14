@@ -12,12 +12,13 @@ from sqlalchemy import func
 
 
 def all_orders(month_year,db:Session):
-    if month_year != "all":
+    if month_year == "all" or month_year == "":
+        results = db.query(Order).all()
+        
+    else:
         results = db.query(Order).filter(
             func.date_format(Order.createdAt, '%Y-%m') == month_year
         ).all()
-    else:
-        results = db.query(Order).all()
     list_orders = []
     for row in results:
         cart = list_cart_product_item_by_cart_id(row.cartId, db)

@@ -5,7 +5,7 @@ from dbconnect import SessionLocal
 from model.user import UserBase
 from security.security import validate_token
 from service.services import generate_token
-from service.user_DAO import all_users, check_customer, create_user, info_customer, existing_customer
+from service.user_DAO import all_users, check_customer, create_user, delete_user, info_customer, existing_customer, update_user
 
 load_dotenv()
 secret_url_api = os.environ.get('SECURITY_URL_API')
@@ -38,7 +38,7 @@ async def post_create_user(body:UserBase = Body(...),db = Depends(get_db)):
     customer = existing_customer(body['username'],db)
     if customer:
         raise HTTPException(status_code=400, detail='Tài khoản đã tồn tại')
-    create_user(body['fullname'],body['username'], body['password'],body['contact'],body['address'],db)
+    create_user(body['fullname'],body['username'], body['password'],body['contact'],body['address'],body['gender'],body['birth'],db)
     return {'message': 'Tạo tài khoản thành công'}
 
 @router.post("/login", tags=["Users"])
@@ -51,11 +51,14 @@ async def post_check_customer(body:UserBase = Body(...),db = Depends(get_db)):
     # Nếu thông tin đăng nhập không hợp lệ, trả về lỗi 401 Unauthorized
     raise HTTPException(status_code=401, detail='Đăng nhập không thành công')
     
-@router.put("/update-user/{id}", tags=["Users"])
-async def update_user():
-    return
+@router.put("/update-user/{id}",dependencies=[Depends(validate_token)], tags=["Users"])
+async def put_update_user(id:str,body:UserBase = Body(...),db = Depends(get_db)):
+    body = body.dict()
+    update_user(id,body,db)
+    return {'message': 'Cập nhật thông tin thành công'}
     
 @router.delete("/delete-user/{id}", tags=["Users"])
-async def delete_user():
-    return
+async def delete_delete_user(id:str, db = Depends(get_db)):
+    delete_user(id,db)
+    return {'message': 'Xóa tài khoản thành công'}
 

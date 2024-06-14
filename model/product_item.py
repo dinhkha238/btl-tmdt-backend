@@ -4,11 +4,11 @@ from sqlalchemy import Column, Integer, String, Float
 from dbconnect import Base
 
 class ProductItemBase(ProductBase):
-    productId: int
-    employeeId: int
-    price:float
+    productId: Optional[int] = None
+    employeeId: Optional[int] = None
+    price: Optional[float] = None
     addedDate: Optional[str] = None
-    inStock: int    
+    inStock: Optional[int] = None    
 
 class ProductItem(Base):
     __tablename__ = 'product_item'

@@ -4,8 +4,8 @@ from sqlalchemy import Column, Integer, String
 from dbconnect import Base
 
 class UserBase(BaseModel):
-    username: str
-    password: str
+    username: Optional[str] = None
+    password: Optional[str] = None
     fullname: Optional[str] = None
     gender: Optional[str] = None
     birth: Optional[str] = None

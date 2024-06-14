@@ -15,7 +15,7 @@ class ProductBase(BaseModel):
     roomType: Optional[str] = None
     series: Optional[str] = None
     discriminator: Optional[str] = None
-    employeeId: int
+    employeeId: Optional[int] = None
     url: Optional[str] = None
 
 

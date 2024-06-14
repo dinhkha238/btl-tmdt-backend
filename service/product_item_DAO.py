@@ -3,7 +3,7 @@ from database import create_connection
 from model.cart_product_item import CartProductItem
 from model.order import Order
 from model.product import Product
-from model.product_item import ProductItem
+from model.product_item import ProductItem, ProductItemBase
 from model.statistic_product_item import StatisticProductItemBase
 from service.product_DAO import product_by_id
 from fuzzywuzzy import fuzz
@@ -121,3 +121,67 @@ def monthly_revenue(db:Session, year):
         monthly_revenues[month - 1] = total_revenue  # Lưu tổng doanh thu vào mảng
 
     return monthly_revenues
+
+def add_product(product: ProductItemBase, db:Session):
+    product_new = Product(
+        name = product.name,
+        summary = product.summary,
+        provider = product.provider,
+        brand = product.brand,
+        model = product.model,
+        version = product.version,
+        roomType = product.roomType,
+        series = product.series,
+        discriminator = product.discriminator,
+        employeeId = 1,
+        url = product.url
+    )
+    db.add(product_new)
+    db.commit()
+
+    product_last = db.query(Product).all()[-1]
+    product_item = ProductItem(
+        productId = product_last.id,
+        price = product.price,
+        inStock = product.inStock,
+        employeeId = 1
+    )
+    db.add(product_item)
+    db.commit()
+
+    return product_item
+
+def update_product(id, product: ProductItemBase, db:Session):
+    product_new = db.query(Product).filter(Product.id == id).first()
+    product_new.name = product.name
+    product_new.summary = product.summary
+    product_new.provider = product.provider
+    product_new.brand = product.brand
+    product_new.model = product.model
+    product_new.version = product.version
+    product_new.roomType = product.roomType
+    product_new.series = product.series
+    product_new.discriminator = product.discriminator
+    product_new.url = product.url
+    db.commit()
+
+    product_item = db.query(ProductItem).filter(ProductItem.productId == id).first()
+    product_item.price = product.price
+    product_item.inStock = product.inStock
+    db.commit()
+
+    return product_item
+
+def delete_product(id, db:Session):
+    product_item = db.query(ProductItem).filter(ProductItem.productId == id).first()
+    if product_item:
+        db.delete(product_item)
+        db.commit()
+        return
+    product = db.query(Product).filter(Product.id == id).first()
+    if product:
+        db.delete(product)
+        db.commit()
+        return
+    return
+    

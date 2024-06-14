@@ -15,8 +15,6 @@ def check_customer(username, password, db:Session):
             return customer
     return None
 
-    
-
 def existing_customer(username, db:Session):
     user = db.query(User).filter(User.username == username).first()
     if not user:
@@ -30,14 +28,35 @@ def info_customer(id, db:Session):
         return user
     return None
     
-def create_user(fullname, username, password, contact, address, db:Session):
-    user = User(fullname=fullname, username=username, password=password, contact=contact, address=address)
+def create_user(fullname, username, password, contact, address,gender,birth, db:Session):
+    user = User(fullname=fullname, username=username, password=password, contact=contact, address=address, gender=gender, birth=birth)
     db.add(user)
-    db.commit
+    db.commit()
     user = existing_customer(username, db)
     customer = Customer(userId=user.id)
     db.add(customer)
     db.commit()
     return user
 
-        
+def update_user(id, body, db:Session):
+    user = db.query(User).filter(User.id == id).first()
+    if user:
+        user.fullname = body['fullname']
+        user.address = body['address']
+        user.contact = body['contact']
+        user.password = body['password']
+        # dùng db.commit() để lưu thay đổi vào database
+        db.commit()
+        return user
+    return None
+
+def delete_user(id, db:Session):
+    user = db.query(User).filter(User.id == id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return
+    return None
+
+
+            
