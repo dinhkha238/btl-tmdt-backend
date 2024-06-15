@@ -177,11 +177,9 @@ def delete_product(id, db:Session):
     if product_item:
         db.delete(product_item)
         db.commit()
-        return
     product = db.query(Product).filter(Product.id == id).first()
     if product:
         db.delete(product)
         db.commit()
-        return
     return
     
