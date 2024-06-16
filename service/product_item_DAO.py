@@ -1,10 +1,13 @@
 
 from database import create_connection
+from model.cart import Cart
 from model.cart_product_item import CartProductItem
+from model.customer import Customer
 from model.order import Order
 from model.product import Product
 from model.product_item import ProductItem, ProductItemBase
 from model.statistic_product_item import StatisticProductItemBase
+from model.user import User
 from service.product_DAO import product_by_id
 from fuzzywuzzy import fuzz
 from sqlalchemy.orm import Session
@@ -92,6 +95,61 @@ def statistic_product_item(db:Session, yy_mm):
         product_item = StatisticProductItemBase(productItemId = row[0], totalQuantity = row[1], nameProductItem = pt_by_id["name"], totalRevenue = row[2])
         list_product_item.append(product_item)
     return list_product_item
+
+def user_spending_info(db: Session,yy_mm):
+    if(yy_mm == ""):
+        results = db.query(
+            User.id.label('idUser'),
+            User.fullname.label('nameUser'),
+            func.sum(CartProductItem.quantity * ProductItem.price).label('spendMoney')
+        ).join(
+            Customer, Customer.userId == User.id
+        ).join(
+            Cart, Customer.id == Cart.customerId
+        ).join(
+            Order, Cart.id == Order.cartId
+        ).join(
+            CartProductItem, Cart.id == CartProductItem.cartId
+        ).join(
+            ProductItem, CartProductItem.productItemId == ProductItem.id
+        ).filter(
+            Order.payStatus > 0,  # Assuming payStatus > 0 indicates a paid order
+        ).group_by(
+            User.id, User.fullname
+        ).all()
+    else:
+        results = db.query(
+            User.id.label('idUser'),
+            User.fullname.label('nameUser'),
+            func.sum(CartProductItem.quantity * ProductItem.price).label('spendMoney')
+        ).join(
+            Customer, Customer.userId == User.id
+        ).join(
+            Cart, Customer.id == Cart.customerId
+        ).join(
+            Order, Cart.id == Order.cartId
+        ).join(
+            CartProductItem, Cart.id == CartProductItem.cartId
+        ).join(
+            ProductItem, CartProductItem.productItemId == ProductItem.id
+        ).filter(
+            Order.payStatus > 0,  # Assuming payStatus > 0 indicates a paid order
+            Order.createdAt.startswith(yy_mm)
+        ).group_by(
+            User.id, User.fullname
+        ).all()
+
+    # Process results into a list of dictionaries
+    user_spending_list = [
+        {
+            'nameUser': str(row.idUser) + " - " + row.nameUser,
+            'spendMoney': row.spendMoney
+        } for row in results
+    ]
+    
+    return user_spending_list
+
+
 
 def monthly_revenue(db:Session, year):
     monthly_revenues = [0] * 12  # Tạo mảng rỗng gồm 12 phần tử ban đầu

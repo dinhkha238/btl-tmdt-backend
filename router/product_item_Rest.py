@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from dbconnect import SessionLocal
 from model.product_item import ProductItemBase
-from service.product_item_DAO import add_product, delete_product, monthly_revenue, product_item_by_id, product_items, statistic_product_item, update_product
+from service.product_item_DAO import add_product, delete_product, monthly_revenue, product_item_by_id, product_items, statistic_product_item, update_product, user_spending_info
 
 
 router = APIRouter()
@@ -34,6 +34,11 @@ async def get_statistic_product_item(yy_mm:str = "", db = Depends(get_db)):
 async def get_monthly_revenue(year:int = "", db = Depends(get_db)):
     list_monthly_revenue = monthly_revenue(db,year)
     return list_monthly_revenue
+
+@router.get("/user-spending-info", tags=["Product-Item"])
+async def get_user_spending_info(yy_mm:str = "",db = Depends(get_db)):
+    list_user_spending_info = user_spending_info(db,yy_mm)
+    return list_user_spending_info
 
 @router.post("/add-product", tags=["Product-Item"])
 async def post_add_product(product: ProductItemBase, db = Depends(get_db)):
